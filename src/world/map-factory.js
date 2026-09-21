@@ -44,6 +44,12 @@ export function buildMaps() {const maps={};const names=Object.keys(D.species).fi
   obj(m,{kind:'fountain',x:10,y:7,name:'Fontana del patto'});
   for(const [x,y] of [[2,2],[3,2],[22,2],[23,2],[2,14],[3,14],[22,15],[23,15]])if(m.grid[y][x]==='grass')m.grid[y][x]='tree';
   for(let y=10;y<=14;y++)for(let x=3;x<=7;x++)if(!m.objects.some(o=>o.x===x&&o.y===y))m.grid[y][x]=m.theme==='grass'?'crop':'flower';
+  const landmarkStyles={home:'abbey',c0:'abbey',c1:'forge',c2:'stars',c3:'wind',c4:'caldera',c5:'memorial',c6:'dragon',c7:'greenhouse'};
+  if(landmarkStyles[m.id]){
+   const style=landmarkStyles[m.id];
+   const names={home:'Abbazia di Borgofoglia',c0:'Abbazia delle Radici',c1:'Grande Forgia',c2:'Torre Astrale',c3:'Torre dei Venti',c4:'Forgia della Caldera',c5:'Memoriale della Memoria',c6:'Statua del Guardiano',c7:'Serra Imperiale'};
+   obj(m,{kind:'landmark',x:16,y:5,style,name:names[m.id]});
+  }
   if(m.id==='home'||/^c[0-7]$/.test(m.id)){
    const rid=m.id+'-archive';obj(m,{kind:'door',x:20,y:13,to:rid,tx:13,ty:14,name:m.id==='home'?'Laboratorio':'Archivio cittadino'});
    const archive=make(rid,m.id==='home'?'Laboratorio di Vannaccius':'Archivio · '+m.name,m.theme,'interior');exit(archive,13,16,m.id,20,14);
