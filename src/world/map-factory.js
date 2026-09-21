@@ -85,6 +85,28 @@ if(kind==='route'){
   for(let y=9;y<=13;y++)m.grid[y][19]='floor';
   obj(m,{kind:'item',x:7,y:4,id:'hidden-dungeon-'+i+'-west',name:'Cassa dimenticata',item:'ultra',qty:1});
   obj(m,{kind:'item',x:19,y:13,id:'hidden-dungeon-'+i+'-east',name:'Reliquia secondaria',item:'material',qty:3});
+  // Every dungeon gets a compact optional vault: three physical sigils, a gated door and a themed reward room.
+  const vaultY=[6,7,6,7,6,7,6,7][i];
+  const sigilXs=[6,13,20];
+  sigilXs.forEach((x,index)=>obj(m,{kind:'dungeonSwitch',x,y:vaultY,index,dungeon:i,name:'Sigillo '+(index+1)}));
+  obj(m,{kind:'door',x:13,y:4,to:'d'+i+'secret',tx:13,ty:14,gate:'dungeon-secret-'+i,name:'Cripta segreta'});
+  const vault=make('d'+i+'secret','Tesoro · '+D.dungeons[i],m.theme,'interior',m.level);
+  exit(vault,13,16,'d'+i,13,3);
+  const rewards=['ultra','superpotion','revive','ether','great','ultra','revive','superpotion'];
+  obj(vault,{kind:'item',x:13,y:8,id:'dungeon-vault-reward-'+i,name:'Tesoro della cripta',item:rewards[i],qty:i%3===0?2:1});
+  obj(vault,{kind:'npc',x:13,y:5,name:'Custode della cripta',text:'I tre sigilli custodiscono ciò che l’Impero non riuscì a confiscare. Hai trovato una traccia che non appare nelle cronache ufficiali.'});
+  // The room itself is visibly different for each dungeon, using the existing pixel-art tile vocabulary.
+  const vaultPatterns=[
+    [[8,4],[9,4],[10,4],[15,4],[16,4],[17,4]],
+    [[5,6],[6,6],[7,6],[18,6],[19,6],[20,6]],
+    [[8,5],[10,5],[12,5],[14,5],[16,5],[18,5]],
+    [[4,8],[5,8],[20,8],[21,8],[4,10],[21,10]],
+    [[8,6],[9,6],[16,6],[17,6],[8,11],[17,11]],
+    [[6,5],[7,5],[19,5],[20,5],[6,11],[20,11]],
+    [[9,5],[10,5],[16,5],[17,5],[9,11],[17,11]],
+    [[5,5],[6,5],[19,5],[20,5],[11,11],[15,11]]
+  ][i];
+  vaultPatterns.forEach(([x,y])=>{if(vault.grid[y]?.[x])vault.grid[y][x]='carpet';});
  }
  // Add city-specific interactive set dressing and architecture.
  const cityDetails={
