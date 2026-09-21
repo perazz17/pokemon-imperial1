@@ -174,6 +174,18 @@ test('party management, bag healing and fast travel are functional', () => {
 });
 
 
+test('routes have distinct themed side corridors and landmarks', () => {
+  const game = new Game(() => 0.99);
+  game.fresh('Test', 'Terram');
+  for (let i = 0; i < 8; i++) {
+    const route = game.maps['r'+i];
+    assert.ok(route.objects.some(object => object.kind === 'landmark'));
+    assert.ok(route.grid.some(row => row.includes('path')));
+  }
+  assert.notDeepEqual(game.maps.r0.grid, game.maps.r4.grid);
+  assert.notDeepEqual(game.maps.r2.grid, game.maps.r6.grid);
+});
+
 test('dungeon encounter pools are themed and secret vaults differ by dungeon', () => {
   const game = new Game(() => 0.99);
   game.fresh('Test', 'Terram');
