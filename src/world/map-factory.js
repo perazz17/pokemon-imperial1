@@ -81,8 +81,8 @@ if(kind==='route'){
   for(let x=7;x<=13;x++)m.grid[9][x]='path';
   for(let y=5;y<=9;y++)m.grid[y][7]='path';
   for(let y=9;y<=14;y++)m.grid[y][16]='path';
-  obj(m,{kind:'item',x:7,y:4,id:'hidden-route-'+i+'-west',name:'Tesoro nascosto',item:i%2?'superpotion':'potion',qty:i%2?2:3});
-  obj(m,{kind:'item',x:16,y:14,id:'hidden-route-'+i+'-east',name:'Borsa del viandante',item:i>4?'ultra':'superpotion',qty:2});
+  obj(m,{kind:'item',x:7,y:4,id:'hidden-route-'+i+'-west',name:'Tesoro nascosto',item:i%2?'super':'potion',qty:i%2?2:3});
+  obj(m,{kind:'item',x:16,y:14,id:'hidden-route-'+i+'-east',name:'Borsa del viandante',item:i>4?'ultra':'super',qty:2});
  }
  for(let i=0;i<8;i++){
   const m=maps['d'+i];
@@ -98,7 +98,7 @@ if(kind==='route'){
   obj(m,{kind:'door',x:13,y:4,to:'d'+i+'secret',tx:13,ty:14,gate:'dungeon-secret-'+i,name:'Cripta segreta'});
   const vault=make('d'+i+'secret','Tesoro · '+D.dungeons[i],m.theme,'interior',m.level);
   exit(vault,13,16,'d'+i,13,3);
-  const rewards=['ultra','superpotion','revive','ether','great','ultra','revive','superpotion'];
+  const rewards=['ultra','super','revive','ether','great','ultra','revive','super'];
   obj(vault,{kind:'item',x:13,y:8,id:'dungeon-vault-reward-'+i,name:'Tesoro della cripta',item:rewards[i],qty:i%3===0?2:1});
   obj(vault,{kind:'npc',x:13,y:5,name:'Custode della cripta',text:'I tre sigilli custodiscono ciò che l’Impero non riuscì a confiscare. Hai trovato una traccia che non appare nelle cronache ufficiali.'});
   // The room itself is visibly different for each dungeon, using the existing pixel-art tile vocabulary.
@@ -128,7 +128,7 @@ if(kind==='route'){
  for(const [id,parts] of Object.entries(cityDetails)){
   const m=maps[id];
   parts.forEach(([kind,x,y],j)=>{
-   if(kind==='item')obj(m,{kind:'item',x,y,id:'city-secret-'+id+'-'+j,name:'Scorta cittadina',item:'superpotion',qty:2});
+   if(kind==='item')obj(m,{kind:'item',x,y,id:'city-secret-'+id+'-'+j,name:'Scorta cittadina',item:'super',qty:2});
    else if(m.grid[y]?.[x]&&!m.objects.some(o=>o.x===x&&o.y===y))m.grid[y][x]=kind;
   });
  }
