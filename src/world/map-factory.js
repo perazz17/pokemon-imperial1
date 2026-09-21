@@ -12,6 +12,12 @@ if(kind==='route'){
  if(theme==='fire'&&x>=3&&x<=7&&y>=11&&y<=15)t='rock';
  if(theme==='ghost'&&((x*5+y*3)%13===0)&&y!==9&&x!==13)t='flower';
  if(theme==='dragon'&&x>=18&&x<=22&&y>=4&&y<=8)t='rock';
+ if(theme==='forest'&&((x*11+y*5)%23===0)&&y!==9)t='tall';
+ if(theme==='stone'&&((x*9+y*13)%29===0)&&y!==9&&x!==13)t='rock';
+ if(theme==='sky'&&((x*5+y*17)%31===0)&&y!==9)t='flower';
+ if(theme==='fire'&&((x*13+y*3)%37===0)&&y!==9)t='rock';
+ if(theme==='ghost'&&((x*17+y*7)%31===0)&&y!==9)t='flower';
+ if(theme==='dragon'&&((x*19+y*11)%41===0)&&y!==9)t='rock';
 }}else if(['gym','interior','dungeon','league'].includes(kind)){t=border?'wall':'floor';if(x===13||y===9)t='carpet';if(kind==='dungeon'&&(x*3+y*7)%19<3&&x!==13&&y!==9)t='rock';}else{if(x===13||y===9||y===13)t='path';if((x+y*3)%31===0&&x!==13&&y!==9&&y!==13)t='flower';}m.grid[y][x]=t;}}maps[id]=m;return m;};
  const obj=(m,o)=>{m.objects.push(o);if(o.kind==='door'){for(let dy=-2;dy<=-1;dy++)for(let dx=-2;dx<=2;dx++)if(m.grid[o.y+dy]?.[o.x+dx])m.grid[o.y+dy][o.x+dx]='wall';}if(o.kind!=='decor')m.grid[o.y][o.x]=m.kind==='route'?'path':m.kind==='town'?'path':'floor';return o;};
  const exit=(m,x,y,to,tx=13,ty=14,gate=null)=>obj(m,{kind:'exit',x,y,to,tx,ty,gate,name:'Passaggio'});
