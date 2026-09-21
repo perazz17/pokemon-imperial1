@@ -86,6 +86,18 @@ if(kind==='route'){
  // Optional side paths turn each route and dungeon into a small exploration space instead of a single corridor.
  for(let i=0;i<8;i++){
   const m=maps['r'+i];
+  // Each route gets a different side-corridor shape so exploration is not just a straight line between cities.
+  const corridors=[
+   [[7,9],[7,8],[7,7],[7,6],[8,6],[9,6]],
+   [[16,9],[16,10],[16,11],[17,11],[18,11],[19,11]],
+   [[7,9],[7,10],[7,11],[8,11],[9,11],[10,11]],
+   [[19,9],[19,8],[19,7],[18,7],[17,7],[16,7]],
+   [[7,9],[7,8],[8,8],[9,8],[9,7],[10,7]],
+   [[16,9],[16,10],[17,10],[18,10],[18,11],[19,11]],
+   [[7,9],[7,8],[7,7],[8,7],[9,7],[9,6]],
+   [[19,9],[19,10],[18,10],[17,10],[17,11],[16,11]]
+  ][i];
+  corridors.forEach(([x,y])=>m.grid[y][x]='path');
   for(let x=7;x<=13;x++)m.grid[9][x]='path';
   for(let y=5;y<=9;y++)m.grid[y][7]='path';
   for(let y=9;y<=14;y++)m.grid[y][16]='path';
