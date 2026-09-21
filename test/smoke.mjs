@@ -174,6 +174,16 @@ test('party management, bag healing and fast travel are functional', () => {
 });
 
 
+test('cities have distinct layouts and signature landmarks', () => {
+  const game = new Game(() => 0.99);
+  game.fresh('Test', 'Terram');
+  const styles = game.maps.c0.objects.filter(o => o.kind === 'landmark').map(o => o.style);
+  assert.ok(styles.includes('abbey'));
+  assert.ok(game.maps.c1.objects.some(o => o.kind === 'landmark' && o.style === 'rail'));
+  assert.ok(game.maps.c5.objects.some(o => o.kind === 'landmark' && o.style === 'memorial'));
+  assert.notDeepEqual(game.maps.c0.grid, game.maps.c4.grid);
+});
+
 test('routes have distinct themed side corridors and landmarks', () => {
   const game = new Game(() => 0.99);
   game.fresh('Test', 'Terram');
