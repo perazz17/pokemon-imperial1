@@ -43,6 +43,17 @@ if(kind==='route'){
  cityLayouts.forEach(([x,y])=>{if(c.grid[y]?.[x]&&c.grid[y][x]!=='wall')c.grid[y][x]='path';});
  const cityLandmarks=[['abbey','Piazza dell’Abbazia'],['rail','Officine Imperiali'],['stars','Osservatorio Astravia'],['lighthouse','Torre del Vento'],['caldera','Forgia della Caldera'],['memorial','Memoriale della Prima Guerra'],['altar','Stele dei Draghi'],['greenhouse','Serre della Valle']];
  obj(c,{kind:'landmark',x:13,y:10,style:cityLandmarks[i][0],name:cityLandmarks[i][1]});
+ const streetProps=[
+  [['lamp',4,5],['bench',8,5],['banner',20,5],['lamp',22,5]],
+  [['crate',4,10],['lamp',8,10],['crate',21,10],['banner',22,5]],
+  [['lamp',4,7],['bench',8,7],['lamp',21,7],['banner',22,12]],
+  [['canal',4,11],['lamp',9,11],['bench',20,11],['lamp',23,11]],
+  [['crate',4,8],['lamp',8,8],['crate',21,8],['banner',22,13]],
+  [['bench',4,10],['lamp',8,10],['banner',21,10],['lamp',23,10]],
+  [['banner',4,6],['lamp',8,6],['bench',21,6],['lamp',23,6]],
+  [['canal',4,10],['bench',9,10],['lamp',20,10],['banner',23,10]]
+ ][i];
+ streetProps.forEach(([style,x,y])=>obj(c,{kind:'decor',style,x,y,name:'Arredo urbano'}));
  const citizens=[['Marta','La strada verso la palestra è aperta, ma il capopalestra non regala nulla.'],['Tano','Le officine di questa città lavorano giorno e notte. Dicono che sotto la montagna ci siano ancora vecchie rotaie imperiali.'],['Iris','Gli archivi conservano più versioni della stessa storia. Leggi sempre le cronache fino in fondo.'],['Nerea','Quando il vento cambia, le navi del porto interno cambiano rotta. Qui impari a non fidarti del primo percorso.'],['Bruno','La caldera scalda ancora le forge. Se senti tremare il terreno, non è un buon momento per stare vicino ai tubi.'],['Ada','Ogni nome inciso sul memoriale appartiene a qualcuno che è esistito davvero. La memoria è parte della città.'],['Ruan','I draghi non obbediscono alle corone. Se un giorno incontrerai Blanchivus, ricordalo.'],['Lia','I canali portano acqua ai giardini. Se li sistemi bene, anche la valle fiorisce.']][i];obj(c,{kind:'npc',x:8,y:12,name:citizens[0],text:citizens[1]});obj(c,{kind:'npc',x:19,y:13,name:'Viandante',text:'Le palestre sono solo una parte del viaggio. Cerca anche dungeon, reliquie e sentieri secondari.'});exit(c,13,16,'r'+i,13,2);exit(c,13,1,i===7?'victory':'r'+(i+1),13,14,'badge-'+(i+1));obj(c,{kind:'door',x:13,y:5,to:'g'+i,tx:13,ty:14,name:'Palestra · '+g.leader});sign(c,18,10,'Abitante',c.description+' Il Capopalestra custodisce la Medaglia '+g.badge+'.');exit(c,24,9,'d'+i,2,9);const d=make('d'+i,D.dungeons[i],r.theme,'dungeon',tiers[i]+3);
  const dungeonStyles=['abbey','rail','stars','lighthouse','caldera','memorial','altar','greenhouse'];
  obj(d,{kind:'landmark',x:5,y:5,style:dungeonStyles[i],name:'Segno distintivo · '+D.dungeons[i]});
