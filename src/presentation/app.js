@@ -6,7 +6,7 @@ function say(text){$('dialogText').textContent=text;$('dialog').hidden=false;}
 function draw(){renderer.render(game);hud();}
 function save(){if(game.state)localStorage.setItem('imperial-save',game.serialize());}
 const battle=new BattlePresenter($('battle'),world,game,message=>say(message));
-world.subscribe(event=>{save();if(event.type==='battle-started'){draw();battle.render();return;}if(event.type==='battle-ended'){$('battle').hidden=true;draw();return;}draw();if(event.result?.message)say(event.result.message);});
+world.subscribe(event=>{if(event.result?.message){game.state.messages=game.state.messages||[];game.state.messages.push(event.result.message);game.state.messages=game.state.messages.slice(-40);}save();if(event.type==='battle-started'){draw();battle.render();return;}if(event.type==='battle-ended'){$('battle').hidden=true;draw();return;}draw();if(event.result?.message)say(event.result.message);});
 $('dialogClose').addEventListener('click',()=>{$('dialog').hidden=true;});
 const menu=$('gameMenu'),menuContent=$('menuContent'),menuTitle=$('menuTitle');
 let menuTab='party';
@@ -29,7 +29,7 @@ function renderMenu(){
   const towns=s.visited.filter(id=>game.maps[id]&&(game.maps[id].kind==='town'||game.maps[id].kind==='league'));
   menuContent.innerHTML=`<div class="map-summary"><b>${game.maps[s.map].name}</b><span>${s.badges.length}/8 Medaglie · ${s.visited.length} luoghi scoperti</span></div><div class="travel-list">${towns.map(id=>{const m=game.maps[id],can=id===s.map||(m.kind==='town'||m.kind==='league')&&s.badges.length>=4;return `<button data-travel="${id}" ${can?'':'disabled'}><span>${m.name}</span><small>${id===s.map?'POSIZIONE ATTUALE':can?'Viaggio rapido disponibile':'Sblocca dopo 4 Medaglie'}</small></button>`}).join('')}</div>`;
  }else{
-  const last=s.messages.slice(-5);
+  const last=(s.messages||[]).slice(-8);
   menuContent.innerHTML=`<div class="journal-objective"><p class="eyebrow">OBIETTIVO</p><p>${game.nextObjective()}</p></div><div class="journal-stats"><span>Medaglie <b>${s.badges.length}/8</b></span><span>Pokédex visti <b>${s.seen.length}</b></span><span>Catturati <b>${s.caught.length}</b></span><span>Materiali <b>${s.materials}</b></span><span>Denaro <b>${s.money}₽</b></span></div><div class="journal-log">${last.map(x=>`<p>${x}</p>`).join('')}</div>`;
  }
 }
@@ -53,7 +53,7 @@ document.querySelectorAll('.touch-controls [data-dir]').forEach(button=>button.a
 document.querySelector('.touch-controls [data-action="interact"]').addEventListener('pointerdown',event=>{event.preventDefault();world.interact();});
 window.addEventListener('keydown',event=>{if(!$('dialog').hidden||!$('battle').hidden||!menu.hidden)return;const dir=directions[event.key];if(dir){event.preventDefault();world.move(...dir);}else if(event.key===' '||event.key==='e'||event.key==='E'){event.preventDefault();world.interact();}else if(event.key==='m'||event.key==='M'){event.preventDefault();openMenu();}});
 const startScreen=$('startScreen');
-function begin(starter){startScreen.hidden=true;world.start('Ari',starter);draw();$('world').focus();}
+function begin(starter){startScreen.hidden=true;world.start('Ari',starter);game.state.messages=[...game.messages];draw();$('world').focus();}
 const raw=localStorage.getItem('imperial-save');
 if(raw){try{game.restore(raw);draw();}catch(error){localStorage.removeItem('imperial-save');startScreen.hidden=false;}}else startScreen.hidden=false;
 document.querySelectorAll('[data-starter]').forEach(button=>button.addEventListener('click',()=>begin(button.dataset.starter)));
