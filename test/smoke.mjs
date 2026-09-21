@@ -172,3 +172,25 @@ test('party management, bag healing and fast travel are functional', () => {
   assert.equal(game.travel('c0'), true);
   assert.equal(game.state.map, 'c0');
 });
+
+
+test('dungeons contain an optional three-sigil vault with a real reward room', () => {
+  const game = new Game(() => 0.99);
+  game.fresh('Test', 'Terram');
+  game.enter('d0', 13, 14);
+  const dungeon = game.maps.d0;
+  const door = dungeon.objects.find(object => object.kind === 'door' && object.gate === 'dungeon-secret-0');
+  assert.equal(game.interact(door).message, 'Passaggio ancora chiuso.');
+  const sigils = dungeon.objects.filter(object => object.kind === 'dungeonSwitch').sort((a,b) => a.index-b.index);
+  assert.equal(sigils.length, 3);
+  assert.match(game.interact(sigils[0]).message, /Sigillo 1\/3/);
+  assert.match(game.interact(sigils[1]).message, /Sigillo 2\/3/);
+  const opened = game.interact(sigils[2]);
+  assert.match(opened.message, /porta segreta/);
+  assert.equal(game.state.flags['dungeon-secret-0'], true);
+  assert.equal(game.interact(door).travel, true);
+  assert.equal(game.state.map, 'd0secret');
+  const vaultItem = game.maps.d0secret.objects.find(object => object.kind === 'item');
+  const reward = game.interact(vaultItem);
+  assert.match(reward.message, /Tesoro della cripta/);
+});
