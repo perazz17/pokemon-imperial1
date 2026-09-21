@@ -31,5 +31,13 @@ export function drawObject(ctx,o,x,y){
   if(o.kind==='item'||o.kind==='relic'){const relic=o.kind==='relic';px(ctx,x+10,y+9,relic?'#9f8bd0':'#f1df8c',13,15);px(ctx,x+12,y+6,relic?'#d8c9ff':'#fff4bd',9,5);px(ctx,x+15,y+2,relic?'#e8ddff':'#fff8d0',3,4);return;}
   if(o.kind==='door'){px(ctx,x+2,y-15,'#8c493f',28,15);px(ctx,x+4,y-18,'#d87555',24,5);px(ctx,x+6,y-10,'#f0d39a',20,10);px(ctx,x+11,y+5,'#503827',10,27);return;}
   if(o.kind==='switch'){px(ctx,x+8,y+9,'#71787b',16,17);px(ctx,x+13,y+3,'#d5b94a',5,12);return;}
-  if(o.kind==='dungeonSwitch'){const lit=['#d7bd55','#8bb7d8','#9f8bd0'][o.index%3];px(ctx,x+6,y+7,'#3e4650',20,20);px(ctx,x+9,y+10,lit,14,14);px(ctx,x+12,y+13,'#f5edc7',8,8);px(ctx,x+14,y+5,lit,4,5);}
+  if(o.kind==='dungeonSwitch'){const lit=['#d7bd55','#8bb7d8','#9f8bd0'][o.index%3];px(ctx,x+6,y+7,'#3e4650',20,20);px(ctx,x+9,y+10,lit,14,14);px(ctx,x+12,y+13,'#f5edc7',8,8);px(ctx,x+14,y+5,lit,4,5);return;}
+  if(o.kind==='decor'){
+    if(o.style==='lamp'){px(ctx,x+14,y+4,'#4b4a4b',4,24);px(ctx,x+9,y+2,'#6e6a55',14,7);px(ctx,x+12,y+3,'#f1d77d',8,5);}
+    else if(o.style==='bench'){px(ctx,x+5,y+14,'#704d35',22,6);px(ctx,x+7,y+9,'#9a7048',18,5);px(ctx,x+7,y+20,'#4c3a2e',4,8);px(ctx,x+21,y+20,'#4c3a2e',4,8);}
+    else if(o.style==='crate'){px(ctx,x+5,y+7,'#8a623d',22,21);px(ctx,x+8,y+10,'#c08a50',16,3);px(ctx,x+8,y+19,'#5f432e',16,3);}
+    else if(o.style==='banner'){px(ctx,x+14,y+1,'#4d4147',4,30);px(ctx,x+18,y+4,'#b65b55',12,13);px(ctx,x+18,y+17,'#d5bd6b',12,3);}
+    else if(o.style==='canal'){px(ctx,x+2,y+7,'#2d7e9d',28,18);px(ctx,x+4,y+10,'#58aec0',20,2);px(ctx,x+17,y+18,'#1c5879',9,2);}
+    return;
+  }
 }
