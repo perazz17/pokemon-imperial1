@@ -30,5 +30,6 @@ export function drawObject(ctx,o,x,y){
   }
   if(o.kind==='item'||o.kind==='relic'){const relic=o.kind==='relic';px(ctx,x+10,y+9,relic?'#9f8bd0':'#f1df8c',13,15);px(ctx,x+12,y+6,relic?'#d8c9ff':'#fff4bd',9,5);px(ctx,x+15,y+2,relic?'#e8ddff':'#fff8d0',3,4);return;}
   if(o.kind==='door'){px(ctx,x+2,y-15,'#8c493f',28,15);px(ctx,x+4,y-18,'#d87555',24,5);px(ctx,x+6,y-10,'#f0d39a',20,10);px(ctx,x+11,y+5,'#503827',10,27);return;}
-  if(o.kind==='switch'){px(ctx,x+8,y+9,'#71787b',16,17);px(ctx,x+13,y+3,'#d5b94a',5,12);}
+  if(o.kind==='switch'){px(ctx,x+8,y+9,'#71787b',16,17);px(ctx,x+13,y+3,'#d5b94a',5,12);return;}
+  if(o.kind==='dungeonSwitch'){const lit=['#d7bd55','#8bb7d8','#9f8bd0'][o.index%3];px(ctx,x+6,y+7,'#3e4650',20,20);px(ctx,x+9,y+10,lit,14,14);px(ctx,x+12,y+13,'#f5edc7',8,8);px(ctx,x+14,y+5,lit,4,5);}
 }
