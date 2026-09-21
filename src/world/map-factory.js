@@ -4,7 +4,15 @@ import DATA from '../data/imperial-data.js';
 const D = DATA;
 
 export function buildMaps() {const maps={};const names=Object.keys(D.species).filter(n=>!D.legends.includes(n));const tiers=[5,16,24,31,38,45,51,55];const evolutionMin={};Object.values(D.species).forEach(d=>{if(d.evo)evolutionMin[d.evo.to]=d.evo.level;});const pools=Array.from({length:8},()=>[]);names.forEach((n,j)=>pools[j%8].push(n));pools[0]=[...new Set(['Bidoof','Starly','Shinx','Erbello','Weedle','Scarab',...pools[0]])];
- const make=(id,name,theme='grass',kind='route',level=5)=>{const m={id,name,theme,kind,level,w:26,h:18,grid:[],objects:[],pool:[],description:''};for(let y=0;y<18;y++){m.grid[y]=[];for(let x=0;x<26;x++){const border=x===0||y===0||x===25||y===17;let t=border?'wall':'grass';if(kind==='route'){if((x*7+y*11)%17<3&&x!==13&&y!==9)t='tree';if(x>=18&&x<=20&&y>1&&y<16)t='water';if(y===9||x===13)t='path';if(y===9&&x>=18&&x<=20)t='bridge';if(x>=3&&x<=10&&y>=4&&y<=7)t='tall';}else if(['gym','interior','dungeon','league'].includes(kind)){t=border?'wall':'floor';if(x===13||y===9)t='carpet';if(kind==='dungeon'&&(x*3+y*7)%19<3&&x!==13&&y!==9)t='rock';}else{if(x===13||y===9||y===13)t='path';if((x+y*3)%31===0&&x!==13&&y!==9&&y!==13)t='flower';}m.grid[y][x]=t;}}maps[id]=m;return m;};
+ const make=(id,name,theme='grass',kind='route',level=5)=>{const m={id,name,theme,kind,level,w:26,h:18,grid:[],objects:[],pool:[],description:''};for(let y=0;y<18;y++){m.grid[y]=[];for(let x=0;x<26;x++){const border=x===0||y===0||x===25||y===17;let t=border?'wall':'grass';if(kind==='route'){if((x*7+y*11)%17<3&&x!==13&&y!==9)t='tree';if(x>=18&&x<=20&&y>1&&y<16)t='water';if(y===9||x===13)t='path';if(y===9&&x>=18&&x<=20)t='bridge';if(x>=3&&x<=10&&y>=4&&y<=7)t='tall';
+if(kind==='route'){
+ if(theme==='forest'&&x%4===0&&y>2&&y<16&&y!==9)t='tree';
+ if(theme==='stone'&&((x+y)%7===0)&&y!==9&&x!==13)t='rock';
+ if(theme==='sky'&&y>=3&&y<=5&&x>2&&x<23)t='flower';
+ if(theme==='fire'&&x>=3&&x<=7&&y>=11&&y<=15)t='rock';
+ if(theme==='ghost'&&((x*5+y*3)%13===0)&&y!==9&&x!==13)t='flower';
+ if(theme==='dragon'&&x>=18&&x<=22&&y>=4&&y<=8)t='rock';
+}}else if(['gym','interior','dungeon','league'].includes(kind)){t=border?'wall':'floor';if(x===13||y===9)t='carpet';if(kind==='dungeon'&&(x*3+y*7)%19<3&&x!==13&&y!==9)t='rock';}else{if(x===13||y===9||y===13)t='path';if((x+y*3)%31===0&&x!==13&&y!==9&&y!==13)t='flower';}m.grid[y][x]=t;}}maps[id]=m;return m;};
  const obj=(m,o)=>{m.objects.push(o);if(o.kind==='door'){for(let dy=-2;dy<=-1;dy++)for(let dx=-2;dx<=2;dx++)if(m.grid[o.y+dy]?.[o.x+dx])m.grid[o.y+dy][o.x+dx]='wall';}if(o.kind!=='decor')m.grid[o.y][o.x]=m.kind==='route'?'path':m.kind==='town'?'path':'floor';return o;};
  const exit=(m,x,y,to,tx=13,ty=14,gate=null)=>obj(m,{kind:'exit',x,y,to,tx,ty,gate,name:'Passaggio'});
  const sign=(m,x,y,name,text)=>obj(m,{kind:'sign',x,y,name,text});
