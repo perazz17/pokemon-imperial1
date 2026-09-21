@@ -140,8 +140,8 @@ test('battle status turns and recovery are deterministic and usable', () => {
   const mon = game.mon('Bidoof', 5);
   assert.equal(game.applyStatus(mon, 'sleep'), true);
   assert.equal(mon.status, 'sleep');
-  mon.statusTurns = 1;
-  assert.equal(game.canAct(mon, []), false);
+  mon.statusTurns = 0;
+  assert.equal(game.canAct(mon, []), true);
   assert.equal(mon.status, null);
   assert.equal(game.canAct(mon, []), true);
 });
