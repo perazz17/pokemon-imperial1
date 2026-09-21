@@ -36,7 +36,21 @@ if(kind==='route'){
  for(let i=0;i<8;i++){
  const m=maps['g'+i],labels=[['Radice','Foglia','Fiore'],['Indietro','Avanti','Gru carico/scarico'],['Disco I','Disco II','Disco III'],['Finestra I','Finestra II','Finestra III'],['Raffredda','Riscalda','Ponte'],['Lanterna I','Lanterna II','Lanterna III'],['Origine','Guerra','Promessa'],['Canale I','Canale II','Semina']][i];
  m.objects.filter(o=>o.kind==='switch').forEach(o=>{o.name=labels[o.index];if(i!==0&&i!==6)o.x=[6,13,20][o.index];});
- for(let x=1;x<25;x++)if(x!==13)m.grid[5][x]='wall';const sign=m.objects.find(o=>o.kind==='sign');sign.text=[
+ for(let x=1;x<25;x++)if(x!==13)m.grid[5][x]='wall';
+ // Each gym gets a distinct physical puzzle layout while preserving a playable central route.
+ const layouts=[
+  [[4,7],[4,8],[4,9],[22,7],[22,8],[22,9],[9,11],[17,11]],
+  [[5,7],[5,8],[21,7],[21,8],[9,12],[17,12],[9,7],[17,7]],
+  [[4,7],[4,8],[4,9],[22,7],[22,8],[22,9],[8,12],[18,12]],
+  [[6,7],[6,8],[20,7],[20,8],[9,11],[17,11],[9,13],[17,13]],
+  [[4,7],[4,8],[22,7],[22,8],[7,12],[19,12],[7,13],[19,13]],
+  [[5,7],[5,8],[21,7],[21,8],[9,11],[17,11],[9,13],[17,13]],
+  [[4,7],[4,8],[22,7],[22,8],[8,12],[18,12],[8,13],[18,13]],
+  [[5,7],[5,8],[21,7],[21,8],[9,12],[17,12],[9,13],[17,13]]
+ ][i];
+ layouts.forEach(([x,y])=>{if(!((x===6||x===13||x===20)&&y===8)&&!(x===13&&y===3))m.grid[y][x]='rock';});
+ for(let x=2;x<24;x++)if(x!==6&&x!==13&&x!==20)m.grid[10][x]='floor';
+ const sign=m.objects.find(o=>o.kind==='sign');sign.text=[
  'Tre tele chiudono la torre. Recidile seguendo il ciclo: Radice → Foglia → Fiore.',
  'La gru carica minerale alla stazione 1. Usa le leve per portare il carrello alla 4, quindi scarica: il peso aprirà il portale.',
  'Ruota i dischi astrali fino a ottenere 1 · 3 · 2. Ogni tocco avanza di un quarto di giro.',
