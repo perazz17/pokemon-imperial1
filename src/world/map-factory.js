@@ -61,6 +61,23 @@ if(kind==='route'){
  'I canali hanno tre posizioni. Regola il primo a 2 e il secondo a 1, poi semina tre volte per far crescere tutte le aiuole.'
  ][i];
  }
+ // Optional side paths turn each route and dungeon into a small exploration space instead of a single corridor.
+ for(let i=0;i<8;i++){
+  const m=maps['r'+i];
+  for(let x=7;x<=13;x++)m.grid[9][x]='path';
+  for(let y=5;y<=9;y++)m.grid[y][7]='path';
+  for(let y=9;y<=14;y++)m.grid[y][16]='path';
+  obj(m,{kind:'item',x:7,y:4,id:'hidden-route-'+i+'-west',name:'Tesoro nascosto',item:i%2?'superpotion':'potion',qty:i%2?2:3});
+  obj(m,{kind:'item',x:16,y:14,id:'hidden-route-'+i+'-east',name:'Borsa del viandante',item:i>4?'ultra':'superpotion',qty:2});
+ }
+ for(let i=0;i<8;i++){
+  const m=maps['d'+i];
+  for(let x=7;x<=13;x++)m.grid[9][x]='floor';
+  for(let y=5;y<=9;y++)m.grid[y][7]='floor';
+  for(let y=9;y<=13;y++)m.grid[y][19]='floor';
+  obj(m,{kind:'item',x:7,y:4,id:'hidden-dungeon-'+i+'-west',name:'Cassa dimenticata',item:'ultra',qty:1});
+  obj(m,{kind:'item',x:19,y:13,id:'hidden-dungeon-'+i+'-east',name:'Reliquia secondaria',item:'material',qty:3});
+ }
  // Public gardens, fountains and inhabited archives give each settlement a readable layout.
  for(const m of Object.values(maps).filter(m=>m.kind==='town')){
   for(const o of m.objects)if(o.kind==='sign'&&!o.name.startsWith('Rotta'))o.kind='npc';
