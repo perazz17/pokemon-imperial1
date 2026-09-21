@@ -14,6 +14,14 @@ function landmark(ctx,o,x,y){
 }
 
 export function drawObject(ctx,o,x,y){
+  if(o.kind==='legend'||o.kind==='mythic'||o.kind==='emperor'){
+    const aura=o.kind==='emperor'?'#d8b85a':o.kind==='legend'?'#8bc5e0':'#a78bd0';
+    px(ctx,x+3,y+2,aura,26,3);px(ctx,x+6,y-3,aura,20,3);px(ctx,x+9,y-8,aura,14,3);
+    px(ctx,x+11,y-18,'#26333a',10,28);px(ctx,x+8,y-12,aura,16,8);
+    px(ctx,x+6,y-7,'#26333a',5,6);px(ctx,x+21,y-7,'#26333a',5,6);
+    px(ctx,x+13,y-9,'#f2e7c4',6,4);px(ctx,x+9,y+5,aura,14,8);px(ctx,x+12,y+13,'#26333a',8,10);
+    return;
+  }
   if(o.kind==='landmark'){landmark(ctx,o,x,y);return;}
   if(['npc','sign','trainer','leader','center','shop','box','league','fountain'].includes(o.kind)){
     if(o.kind==='sign'){px(ctx,x+13,y+5,'#e2c27f',7,10);px(ctx,x+15,y+15,'#6c482e',3,15);return;}
