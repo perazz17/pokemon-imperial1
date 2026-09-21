@@ -155,3 +155,20 @@ test('battle move selection avoids immune damage and considers STAB', () => {
   assert.equal(typeof choice, 'string');
   assert.ok(attacker.moves.includes(choice));
 });
+
+
+test('party management, bag healing and fast travel are functional', () => {
+  const game = new Game(() => 0.99);
+  game.fresh('Test', 'Terram');
+  const second = game.mon('Bidoof', 5);
+  game.state.party.push(second);
+  game.state.party[0].hp = 1;
+  assert.equal(game.useItem('potion', 0).ok, true);
+  assert.ok(game.state.party[0].hp > 1);
+  assert.equal(game.lead(1), true);
+  assert.equal(game.state.party[0].name, 'Bidoof');
+  game.state.badges = [0, 1, 2, 3];
+  game.state.visited.push('c0');
+  assert.equal(game.travel('c0'), true);
+  assert.equal(game.state.map, 'c0');
+});
