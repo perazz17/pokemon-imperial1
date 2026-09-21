@@ -78,6 +78,24 @@ if(kind==='route'){
   obj(m,{kind:'item',x:7,y:4,id:'hidden-dungeon-'+i+'-west',name:'Cassa dimenticata',item:'ultra',qty:1});
   obj(m,{kind:'item',x:19,y:13,id:'hidden-dungeon-'+i+'-east',name:'Reliquia secondaria',item:'material',qty:3});
  }
+ // Add city-specific interactive set dressing and architecture.
+ const cityDetails={
+  c0:[['tree',4,4],['tree',5,4],['flower',8,3],['fountain',10,7]],
+  c1:[['rock',4,4],['rock',5,4],['rock',22,4],['item',7,3]],
+  c2:[['flower',4,4],['flower',5,4],['rock',21,3],['item',22,6]],
+  c3:[['water',4,4],['water',5,4],['flower',21,4],['item',22,12]],
+  c4:[['rock',4,4],['rock',5,4],['rock',22,4],['item',8,3]],
+  c5:[['flower',4,4],['flower',5,4],['tree',22,4],['item',22,12]],
+  c6:[['rock',4,4],['rock',5,4],['flower',21,4],['item',8,3]],
+  c7:[['crop',4,4],['crop',5,4],['crop',6,4],['crop',21,4]]
+ };
+ for(const [id,parts] of Object.entries(cityDetails)){
+  const m=maps[id];
+  parts.forEach(([kind,x,y],j)=>{
+   if(kind==='item')obj(m,{kind:'item',x,y,id:'city-secret-'+id+'-'+j,name:'Scorta cittadina',item:'superpotion',qty:2});
+   else if(m.grid[y]?.[x]&&!m.objects.some(o=>o.x===x&&o.y===y))m.grid[y][x]=kind;
+  });
+ }
  // Public gardens, fountains and inhabited archives give each settlement a readable layout.
  for(const m of Object.values(maps).filter(m=>m.kind==='town')){
   for(const o of m.objects)if(o.kind==='sign'&&!o.name.startsWith('Rotta'))o.kind='npc';
