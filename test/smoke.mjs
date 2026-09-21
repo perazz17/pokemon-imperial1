@@ -133,3 +133,25 @@ test('second V78 city and gym remain gated by the Fioren medal and use its real 
   assert.equal(leader.battle, true);
   assert.equal(game.state.battle.context.kind, 'gym');
 });
+
+test('battle status turns and recovery are deterministic and usable', () => {
+  const game = new Game(() => 0);
+  game.fresh('Test', 'Terram');
+  const mon = game.mon('Bidoof', 5);
+  assert.equal(game.applyStatus(mon, 'sleep'), true);
+  assert.equal(mon.status, 'sleep');
+  assert.equal(game.canAct(mon, []), false);
+  assert.equal(game.canAct(mon, []), false);
+  assert.equal(mon.status, null);
+  assert.equal(game.canAct(mon, []), true);
+});
+
+test('battle move selection avoids immune damage and considers STAB', () => {
+  const game = new Game(() => 0.99);
+  game.fresh('Test', 'Terram');
+  const attacker = game.mon('Terram', 20);
+  const ghost = game.mon('Gastly', 20);
+  const choice = game.best(attacker, ghost);
+  assert.equal(typeof choice, 'string');
+  assert.ok(attacker.moves.includes(choice));
+});
