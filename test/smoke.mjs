@@ -174,6 +174,15 @@ test('party management, bag healing and fast travel are functional', () => {
 });
 
 
+test('cities include distinct non-blocking street props', () => {
+  const game = new Game(() => 0.99);
+  game.fresh('Test', 'Terram');
+  assert.ok(game.maps.c0.objects.some(o => o.kind === 'decor' && o.style === 'bench'));
+  assert.ok(game.maps.c1.objects.some(o => o.kind === 'decor' && o.style === 'crate'));
+  assert.ok(game.maps.c3.objects.some(o => o.kind === 'decor' && o.style === 'canal'));
+  assert.ok(game.maps.c7.objects.some(o => o.kind === 'decor' && o.style === 'canal'));
+});
+
 test('cities have distinct layouts and signature landmarks', () => {
   const game = new Game(() => 0.99);
   game.fresh('Test', 'Terram');
