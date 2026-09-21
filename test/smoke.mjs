@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { Game, OverworldController } from '../src/index.js';
+import { Game, OverworldController, D } from '../src/index.js';
 
 test('world extraction builds the V78 starting map', () => {
   const game = new Game(() => 0.99);
@@ -173,6 +173,19 @@ test('party management, bag healing and fast travel are functional', () => {
   assert.equal(game.state.map, 'c0');
 });
 
+
+test('dungeon encounter pools are themed and secret vaults differ by dungeon', () => {
+  const game = new Game(() => 0.99);
+  game.fresh('Test', 'Terram');
+  const fire = game.maps.d4;
+  const ghost = game.maps.d5;
+  assert.equal(fire.encounterRate, 0.16);
+  assert.ok(fire.pool.some(name => D.species[name].types.includes('Fire')));
+  assert.ok(ghost.pool.some(name => D.species[name].types.includes('Ghost')));
+  assert.ok(Array.isArray(fire.rarePool));
+  assert.ok(game.maps.d4secret.objects.some(object => object.kind === 'item'));
+  assert.ok(game.maps.d7secret.objects.some(object => object.kind === 'npc'));
+});
 
 test('dungeons contain an optional three-sigil vault with a real reward room', () => {
   const game = new Game(() => 0.99);
