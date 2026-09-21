@@ -10,7 +10,7 @@ world.subscribe(event=>{save();if(event.type==='battle-started'){draw();battle.r
 $('dialogClose').addEventListener('click',()=>{$('dialog').hidden=true;});
 $('saveGame').addEventListener('click',()=>{save();say('Partita salvata su questo dispositivo.');});
 $('loadGame').addEventListener('click',()=>{const raw=localStorage.getItem('imperial-save');if(!raw)return say('Nessun salvataggio trovato su questo dispositivo.');try{game.restore(raw);draw();if(game.state.battle){$('battle').hidden=false;battle.render();}say('Partita caricata.');}catch(error){say('Salvataggio non valido: '+error.message);}});
-$('newGame').addEventListener('click',()=>{localStorage.removeItem('imperial-save');world.start('Ari','Terram');draw();});
+$('newGame').addEventListener('click',()=>{localStorage.removeItem('imperial-save');game.state=null;game.messages=[];$('battle').hidden=true;startScreen.hidden=false;});
 document.querySelectorAll('.touch-controls [data-dir]').forEach(button=>button.addEventListener('pointerdown',event=>{event.preventDefault();const dir=directions[{up:'ArrowUp',down:'ArrowDown',left:'ArrowLeft',right:'ArrowRight'}[button.dataset.dir]];world.move(...dir);}));
 document.querySelector('.touch-controls [data-action="interact"]').addEventListener('pointerdown',event=>{event.preventDefault();world.interact();});
 window.addEventListener('keydown',event=>{if(!$('dialog').hidden||!$('battle').hidden)return;const dir=directions[event.key];if(dir){event.preventDefault();world.move(...dir);}else if(event.key===' '||event.key==='e'||event.key==='E'){event.preventDefault();world.interact();}});
