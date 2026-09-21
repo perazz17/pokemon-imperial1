@@ -174,6 +174,15 @@ test('party management, bag healing and fast travel are functional', () => {
 });
 
 
+test('routes contain optional shrine lore discoveries', () => {
+  const game = new Game(() => 0.99);
+  game.fresh('Test', 'Terram');
+  for (let i = 0; i < 8; i++) {
+    assert.ok(game.maps['r'+i].objects.some(o => o.kind === 'relic' && o.id === 'route-relic-'+i));
+    assert.ok(game.maps['r'+i].objects.some(o => o.kind === 'landmark'));
+  }
+});
+
 test('cities include distinct non-blocking street props', () => {
   const game = new Game(() => 0.99);
   game.fresh('Test', 'Terram');
