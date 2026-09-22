@@ -1,4 +1,4 @@
-import { Game } from '../index.js';import { OverworldController } from '../world/overworld-controller.js';import { OverworldRenderer } from './overworld-renderer.js';import { BattlePresenter } from './battle-presenter.js';
+import { Game } from '../index.js';import { OverworldController } from '../world/overworld-controller.js';import { OverworldRenderer } from './overworld-renderer.js';import { BattlePresenter } from './battle-presenter.js';import { drawPokemonSprite } from './assets/pokemon/sprites.js';
 const $=id=>document.getElementById(id),game=new Game(),world=new OverworldController(game),renderer=new OverworldRenderer($('world'));
 const directions={ArrowUp:[0,-1],w:[0,-1],W:[0,-1],ArrowDown:[0,1],s:[0,1],S:[0,1],ArrowLeft:[-1,0],a:[-1,0],A:[-1,0],ArrowRight:[1,0],d:[1,0],D:[1,0]};
 function hud(){const s=game.state,m=game.maps[s.map];$('location').innerHTML=`<p class="eyebrow">${m.kind}</p><h2>${m.name}</h2>`;$('trainer').textContent=s.name;$('objective').textContent=game.nextObjective();$('party').textContent=s.party.map(p=>`${p.name} Lv.${p.level} · ${p.hp}/${p.maxHp} HP`).join('\n');}
@@ -53,8 +53,8 @@ document.querySelectorAll('.touch-controls [data-dir]').forEach(button=>button.a
 document.querySelector('.touch-controls [data-action="interact"]').addEventListener('pointerdown',event=>{event.preventDefault();world.interact();});
 window.addEventListener('keydown',event=>{if(!$('dialog').hidden||!$('battle').hidden||!menu.hidden||!game.state)return;const dir=directions[event.key];if(dir){event.preventDefault();world.move(...dir);}else if(event.key===' '||event.key==='e'||event.key==='E'){event.preventDefault();world.interact();}else if(event.key==='m'||event.key==='M'){event.preventDefault();openMenu();}});
 const startScreen=$('startScreen');
-function begin(starter){startScreen.hidden=true;world.start('Ari',starter);game.state.messages=[...game.messages];draw();$('world').focus();}
+function renderStarters(){document.querySelectorAll('.starter-sprite').forEach(canvas=>drawPokemonSprite(canvas.getContext('2d'),canvas.dataset.sprite,{frame:0}));}function begin(starter){startScreen.hidden=true;world.start('Ari',starter);game.state.messages=[...game.messages];draw();$('world').focus();}
 const raw=localStorage.getItem('imperial-save');
 if(raw){try{game.restore(raw);draw();}catch(error){localStorage.removeItem('imperial-save');startScreen.hidden=false;}}else startScreen.hidden=false;
 document.querySelectorAll('[data-starter]').forEach(button=>button.addEventListener('click',()=>begin(button.dataset.starter)));
-if(raw&&game.state)$('world').focus();
+if(raw&&game.state)$('world').focus();else renderStarters();
