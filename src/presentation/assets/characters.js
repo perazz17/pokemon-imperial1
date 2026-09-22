@@ -10,6 +10,7 @@ export function drawCharacter(ctx,x,y,colors,facing='down',walking=false){
  else {px(ctx,x+12,y+13+bob,'#263847',2,2);px(ctx,x+18,y+13+bob,'#263847',2,2);}
  px(ctx,x+7,y+18+bob,colors.coat,18,10);px(ctx,x+4,y+20+bob,colors.coat,4,8);px(ctx,x+24,y+20+bob,colors.coat,4,8);
  px(ctx,x+9,y+27+bob,'#263847',5,5);px(ctx,x+18,y+27+bob,'#263847',5,5);
+ if(colors===characterPalettes.player){px(ctx,x+7,y+15+bob,'#c6a94f',18,3);px(ctx,x+10,y+4+bob,'#d5b749',12,3);}
  px(ctx,x+10,y+19+bob,colors.accent||'#ddd',12,3);
  if(facing==='left')px(ctx,x+8,y+13+bob,'#263847',2,2);if(facing==='right')px(ctx,x+21,y+13+bob,'#263847',2,2);
 }
