@@ -6,7 +6,7 @@ function say(text){$('dialogText').textContent=text;$('dialog').hidden=false;}
 function draw(){renderer.render(game);hud();}
 function save(){if(game.state)localStorage.setItem('imperial-save',game.serialize());}
 const battle=new BattlePresenter($('battle'),world,game,message=>say(message));
-world.subscribe(event=>{if(event.result?.message){game.state.messages=game.state.messages||[];game.state.messages.push(event.result.message);game.state.messages=game.state.messages.slice(-40);}save();if(event.type==='battle-started'){draw();battle.render();return;}if(event.type==='battle-ended'){$('battle').hidden=true;draw();return;}draw();if(event.result?.message)say(event.result.message);});
+world.subscribe(event=>{if(event.result?.message){game.state.messages=game.state.messages||[];game.state.messages.push(event.result.message);game.state.messages=game.state.messages.slice(-40);}save();if(event.result?.panel){openMenu(event.result.panel);return;}if(event.type==='battle-started'){draw();battle.render();return;}if(event.type==='battle-ended'){$('battle').hidden=true;draw();return;}draw();if(event.result?.message)say(event.result.message);});
 $('dialogClose').addEventListener('click',()=>{$('dialog').hidden=true;});
 const menu=$('gameMenu'),menuContent=$('menuContent'),menuTitle=$('menuTitle');
 let menuTab='party';
@@ -17,7 +17,7 @@ function openMenu(tab=menuTab){
 }
 function renderMenu(){
  const s=game.state;
- const titles={party:'Squadra',bag:'Borsa',map:'Mappa',journal:'Diario'};
+ const titles={party:'Squadra',bag:'Borsa',map:'Mappa',journal:'Diario',shop:'Emporio',box:'Box Pokémon'};
  menuTitle.textContent=titles[menuTab]||'Menu';
  document.querySelectorAll('[data-menu-tab]').forEach(b=>b.classList.toggle('active',b.dataset.menuTab===menuTab));
  if(menuTab==='party'){
@@ -51,7 +51,7 @@ $('loadGame').addEventListener('click',()=>{const raw=localStorage.getItem('impe
 $('newGame').addEventListener('click',()=>{localStorage.removeItem('imperial-save');game.state=null;game.messages=[];$('battle').hidden=true;startScreen.hidden=false;});
 document.querySelectorAll('.touch-controls [data-dir]').forEach(button=>button.addEventListener('pointerdown',event=>{event.preventDefault();const dir=directions[{up:'ArrowUp',down:'ArrowDown',left:'ArrowLeft',right:'ArrowRight'}[button.dataset.dir]];world.move(...dir);}));
 document.querySelector('.touch-controls [data-action="interact"]').addEventListener('pointerdown',event=>{event.preventDefault();world.interact();});
-window.addEventListener('keydown',event=>{if(!$('dialog').hidden||!$('battle').hidden||!menu.hidden)return;const dir=directions[event.key];if(dir){event.preventDefault();world.move(...dir);}else if(event.key===' '||event.key==='e'||event.key==='E'){event.preventDefault();world.interact();}else if(event.key==='m'||event.key==='M'){event.preventDefault();openMenu();}});
+window.addEventListener('keydown',event=>{if(!$('dialog').hidden||!$('battle').hidden||!menu.hidden||!game.state)return;const dir=directions[event.key];if(dir){event.preventDefault();world.move(...dir);}else if(event.key===' '||event.key==='e'||event.key==='E'){event.preventDefault();world.interact();}else if(event.key==='m'||event.key==='M'){event.preventDefault();openMenu();}});
 const startScreen=$('startScreen');
 function begin(starter){startScreen.hidden=true;world.start('Ari',starter);game.state.messages=[...game.messages];draw();$('world').focus();}
 const raw=localStorage.getItem('imperial-save');
