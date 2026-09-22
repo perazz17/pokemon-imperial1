@@ -247,3 +247,21 @@ test('dungeons contain an optional three-sigil vault with a real reward room', (
   const reward = game.interact(vaultItem);
   assert.match(reward.message, /Tesoro della cripta/);
 });
+
+
+test('shop and Pokemon box management are functional', () => {
+  const game = new Game(() => 0.99);
+  game.fresh('Test', 'Terram');
+  const startingMoney = game.state.money;
+  assert.equal(game.buy('potion', 5), true);
+  assert.equal(game.state.bag.potion, 13);
+  assert.equal(game.state.money, startingMoney - 500);
+  const second = game.mon('Bidoof', 5);
+  game.state.party.push(second);
+  assert.equal(game.deposit(1), true);
+  assert.equal(game.state.party.length, 1);
+  assert.equal(game.state.box.length, 1);
+  assert.equal(game.withdraw(0), true);
+  assert.equal(game.state.party.length, 2);
+  assert.equal(game.state.box.length, 0);
+});
