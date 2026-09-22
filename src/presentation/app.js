@@ -28,6 +28,11 @@ function renderMenu(){
  }else if(menuTab==='map'){
   const towns=s.visited.filter(id=>game.maps[id]&&(game.maps[id].kind==='town'||game.maps[id].kind==='league'));
   menuContent.innerHTML=`<div class="map-summary"><b>${game.maps[s.map].name}</b><span>${s.badges.length}/8 Medaglie · ${s.visited.length} luoghi scoperti</span></div><div class="travel-list">${towns.map(id=>{const m=game.maps[id],can=id===s.map||(m.kind==='town'||m.kind==='league')&&s.badges.length>=4;return `<button data-travel="${id}" ${can?'':'disabled'}><span>${m.name}</span><small>${id===s.map?'POSIZIONE ATTUALE':can?'Viaggio rapido disponibile':'Sblocca dopo 4 Medaglie'}</small></button>`}).join('')}</div>`;
+ }else if(menuTab==='shop'){
+  const stock=[['ball','Poké Ball','Cattura Pokémon selvatici.','150₽'],['great','Mega Ball','Maggiore probabilità di cattura.','350₽'],['ultra','Ultra Ball','Alta probabilità di cattura.','700₽'],['potion','Pozione','Recupera 20 HP.','100₽'],['super','Super Pozione','Recupera 60 HP.','300₽'],['revive','Revitalizzante','Rianima un Pokémon al 50% HP.','500₽'],['antidote','Antidoto','Cura una condizione.','150₽'],['ether','Etere','Ripristina tutti i PP.','400₽']];
+  menuContent.innerHTML=`<div class="menu-note"><b>Disponibilità: ${s.money}₽</b> · Acquista singoli oggetti o confezioni da 5.</div><div class="menu-grid shop-grid">${stock.map(([id,name,desc,price])=>`<article class="bag-item"><div><b>${name}</b><small>${desc}</small></div><strong>${price}</strong><div class="shop-actions"><button data-buy="${id}" data-qty="1">+1</button><button data-buy="${id}" data-qty="5">+5</button></div></article>`).join('')}</div>`;
+ }else if(menuTab==='box'){
+  menuContent.innerHTML=`<div class="menu-note">Squadra ${s.party.length}/6 · Box ${s.box.length}. Non puoi depositare l'ultimo Pokémon della squadra.</div><div class="box-section"><h3>Squadra</h3><div class="menu-grid">${s.party.map((p,i)=>`<article class="menu-mon"><div><b>${p.name}</b><span>Lv.${p.level}</span></div><small>${p.hp}/${p.maxHp} HP</small><button data-deposit="${i}" ${s.party.length<=1?'disabled':''}>Deposita nel Box</button></article>`).join('')}</div></div><div class="box-section"><h3>Box</h3><div class="menu-grid">${s.box.length?s.box.map((p,i)=>`<article class="menu-mon"><div><b>${p.name}</b><span>Lv.${p.level}</span></div><small>${p.hp}/${p.maxHp} HP</small><button data-withdraw="${i}" ${s.party.length>=6?'disabled':''}>Aggiungi alla squadra</button></article>`).join(''):'<p class="menu-note">Il Box è vuoto. Cattura nuovi Pokémon per riempirlo.</p>'}</div></div>`;
  }else{
   const last=(s.messages||[]).slice(-8);
   menuContent.innerHTML=`<div class="journal-objective"><p class="eyebrow">OBIETTIVO</p><p>${game.nextObjective()}</p></div><div class="journal-stats"><span>Medaglie <b>${s.badges.length}/8</b></span><span>Pokédex visti <b>${s.seen.length}</b></span><span>Catturati <b>${s.caught.length}</b></span><span>Materiali <b>${s.materials}</b></span><span>Denaro <b>${s.money}₽</b></span></div><div class="journal-log">${last.map(x=>`<p>${x}</p>`).join('')}</div>`;
@@ -41,6 +46,12 @@ menu.addEventListener('click',event=>{
  if(lead!==undefined){if(game.lead(+lead)){save();renderMenu();draw();}return;}
  const item=event.target.closest('[data-use-item]')?.dataset.useItem;
  if(item){const result=game.useItem(item,0);save();renderMenu();draw();if(result.message)say(result.message);return;}
+ const buy=event.target.closest('[data-buy]');
+ if(buy){const id=buy.dataset.buy,qty=+buy.dataset.qty;const ok=game.buy(id,qty);save();renderMenu();draw();say(ok?`Acquistato: ${itemNames[id]||id} ×${qty}.`:'Acquisto non riuscito: controlla il denaro o la disponibilità.');return;}
+ const deposit=event.target.closest('[data-deposit]')?.dataset.deposit;
+ if(deposit!==undefined){const ok=game.deposit(+deposit);save();renderMenu();draw();if(!ok)say('Non puoi depositare questo Pokémon.');return;}
+ const withdraw=event.target.closest('[data-withdraw]')?.dataset.withdraw;
+ if(withdraw!==undefined){const ok=game.withdraw(+withdraw);save();renderMenu();draw();if(!ok)say('La squadra è piena o il Pokémon non è disponibile.');return;}
  const travel=event.target.closest('[data-travel]')?.dataset.travel;
  if(travel&&travel!==game.state.map){if(game.travel(travel)){save();menu.hidden=true;draw();}return;}
 });
